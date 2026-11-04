@@ -55,7 +55,14 @@ export interface GridProps extends layoutProps {
   slots: { Column: Slot }[];
   liveVisibility: boolean;
   className?: string;
+  /** Alignment saved before each column had its own setting. */
   align?: "left" | "center" | "right";
+  alignColumn1?: "left" | "center" | "right";
+  alignColumn2?: "left" | "center" | "right";
+  alignColumn3?: "left" | "center" | "right";
+  alignColumn4?: "left" | "center" | "right";
+  alignColumn5?: "left" | "center" | "right";
+  alignColumn6?: "left" | "center" | "right";
   /** @internal */
   analytics: {
     scope?: string;
@@ -65,32 +72,59 @@ export interface GridProps extends layoutProps {
 const GridSection = React.forwardRef<
   HTMLDivElement,
   Parameters<PuckComponent<GridProps>>[0]
->(({ className, columns = 2, backgroundColor, slots, align }, ref) => {
-  const resolvedAlign = align ?? "left";
+>(
+  (
+    {
+      className,
+      columns = 2,
+      backgroundColor,
+      slots,
+      align,
+      alignColumn1,
+      alignColumn2,
+      alignColumn3,
+      alignColumn4,
+      alignColumn5,
+      alignColumn6,
+    },
+    ref
+  ) => {
+    const columnAlignments = [
+      alignColumn1,
+      alignColumn2,
+      alignColumn3,
+      alignColumn4,
+      alignColumn5,
+      alignColumn6,
+    ];
 
-  return (
-    <PageSection background={backgroundColor} className={className}>
-      <div className={gridVariants({ columns })} ref={ref}>
-        {slots.slice(0, columns).map(({ Column }, idx) => (
-          <Column
-            key={idx}
-            className={themeManagerCn(
-              layoutVariants({ gap: "4" }),
-              `flex flex-col max-w-full overflow-hidden`,
-              columns === 1 &&
-                (resolvedAlign === "left"
-                  ? `md:items-start text-start`
-                  : resolvedAlign === "right"
-                    ? `md:items-end text-end`
-                    : `md:items-center text-center`)
-            )}
-            allow={gridAllowedComponents}
-          />
-        ))}
-      </div>
-    </PageSection>
-  );
-});
+    return (
+      <PageSection background={backgroundColor} className={className}>
+        <div className={gridVariants({ columns })} ref={ref}>
+          {slots.slice(0, columns).map(({ Column }, idx) => {
+            const resolvedAlign = columnAlignments[idx] ?? align ?? "left";
+
+            return (
+              <Column
+                key={idx}
+                className={themeManagerCn(
+                  layoutVariants({ gap: "4" }),
+                  `flex flex-col max-w-full overflow-hidden`,
+                  resolvedAlign === "left"
+                    ? `md:items-start text-start`
+                    : resolvedAlign === "right"
+                      ? `md:items-end text-end`
+                      : `md:items-center text-center`
+                )}
+                allow={gridAllowedComponents}
+              />
+            );
+          })}
+        </div>
+      </PageSection>
+    );
+  }
+);
 
 GridSection.displayName = "GridSection";
 
@@ -119,8 +153,33 @@ const gridSectionFields: YextFields<GridProps> = {
     label: msg("fields.backgroundColor", "Background Color"),
     options: "BACKGROUND_COLOR",
   },
-  align: {
-    label: msg("fields.alignContent", "Align Content"),
+  alignColumn1: {
+    label: msg("fields.alignContentColumn1", "Align Content Column 1"),
+    type: "radio",
+    options: ThemeOptions.ALIGNMENT,
+  },
+  alignColumn2: {
+    label: msg("fields.alignContentColumn2", "Align Content Column 2"),
+    type: "radio",
+    options: ThemeOptions.ALIGNMENT,
+  },
+  alignColumn3: {
+    label: msg("fields.alignContentColumn3", "Align Content Column 3"),
+    type: "radio",
+    options: ThemeOptions.ALIGNMENT,
+  },
+  alignColumn4: {
+    label: msg("fields.alignContentColumn4", "Align Content Column 4"),
+    type: "radio",
+    options: ThemeOptions.ALIGNMENT,
+  },
+  alignColumn5: {
+    label: msg("fields.alignContentColumn5", "Align Content Column 5"),
+    type: "radio",
+    options: ThemeOptions.ALIGNMENT,
+  },
+  alignColumn6: {
+    label: msg("fields.alignContentColumn6", "Align Content Column 6"),
     type: "radio",
     options: ThemeOptions.ALIGNMENT,
   },
@@ -145,6 +204,15 @@ const gridSectionFields: YextFields<GridProps> = {
   },
 };
 
+const alignmentFields = [
+  "alignColumn1",
+  "alignColumn2",
+  "alignColumn3",
+  "alignColumn4",
+  "alignColumn5",
+  "alignColumn6",
+] as const;
+
 /**
  * The Grid Section component presents a series of columns into which a variety of smaller content blocks may be dragged, allowing for a higher degree of customization.
  */
@@ -159,17 +227,19 @@ export const Grid: YextComponentConfig<GridProps> = {
     analytics: {
       scope: "gridSection",
     },
-    align: "left",
+    alignColumn1: "left",
+    alignColumn2: "left",
+    alignColumn3: "left",
+    alignColumn4: "left",
+    alignColumn5: "left",
+    alignColumn6: "left",
   },
   resolveFields: (data) => {
-    if (data.props.columns === 1) {
-      return toPuckFields(gridSectionFields);
-    }
-
-    const rest = { ...gridSectionFields };
-    delete rest.align;
-
-    return toPuckFields(rest);
+    const fields = { ...gridSectionFields };
+    alignmentFields.slice(data.props.columns).forEach((field) => {
+      delete fields[field];
+    });
+    return toPuckFields(fields);
   },
   resolveData: (data) => {
     let slots = data.props.slots;
@@ -194,6 +264,12 @@ export const Grid: YextComponentConfig<GridProps> = {
       props: {
         ...data.props,
         slots,
+        alignColumn1: data.props.alignColumn1 ?? data.props.align ?? "left",
+        alignColumn2: data.props.alignColumn2 ?? data.props.align ?? "left",
+        alignColumn3: data.props.alignColumn3 ?? data.props.align ?? "left",
+        alignColumn4: data.props.alignColumn4 ?? data.props.align ?? "left",
+        alignColumn5: data.props.alignColumn5 ?? data.props.align ?? "left",
+        alignColumn6: data.props.alignColumn6 ?? data.props.align ?? "left",
       },
     };
   },
