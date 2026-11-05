@@ -99,11 +99,12 @@ const GridSection = React.forwardRef<
               className={themeManagerCn(
                 layoutVariants({ gap: "4" }),
                 `flex flex-col max-w-full overflow-hidden`,
+                resolvedAlign !== "left" && "[&>*]:max-w-full",
                 resolvedAlign === "left"
                   ? `md:items-start text-start`
                   : resolvedAlign === "right"
-                    ? `md:items-end text-end`
-                    : `md:items-center text-center`
+                    ? `items-end text-end`
+                    : `items-center text-center`
               )}
               allow={gridAllowedComponents}
             />
