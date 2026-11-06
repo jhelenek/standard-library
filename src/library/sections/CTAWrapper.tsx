@@ -28,6 +28,7 @@ import {
   getCTAType,
   isNonNormalizableLinkType,
 } from "@yext/visual-editor/section-library-support";
+import { z } from "zod";
 
 export interface CTAWrapperProps {
   data: {
@@ -85,6 +86,10 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
     label: msg("fields.data", "Data"),
     objectFields: {
       show: {
+        generation: {
+          instructions:
+            "Whether to render this CTA. Set true when authoring CTA content or binding an entity field, including a secondary header CTA. Set false only when intentionally omitting the CTA or when the user explicitly asks to hide it.",
+        },
         label: msg("fields.showCTA", "Show CTA"),
         type: "radio",
         options: [
@@ -94,6 +99,9 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
         visible: false,
       },
       actionType: {
+        generation: {
+          schema: z.literal("link").optional(),
+        },
         label: msg("fields.actionType", "Action Type"),
         type: "radio",
         options: [
@@ -115,19 +123,23 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
         visible: false,
       },
       buttonText: {
+        generation: { exclude: true },
         type: "translatableString",
         label: msg("fields.buttonText", "Button Text"),
         filter: { types: ["type.string"] },
       },
       customId: {
+        generation: { exclude: true },
         label: msg("fields.customId", "Custom ID"),
         type: "text",
       },
       customClass: {
+        generation: { exclude: true },
         label: msg("fields.customClass", "Custom Class"),
         type: "text",
       },
       dataAttributes: {
+        generation: { exclude: true },
         label: msg("fields.dataAttributes", "Data Attributes"),
         type: "array",
         defaultItemProps: {
@@ -153,6 +165,7 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
             : `${pt("dataAttribute", "Attribute")} ${(index ?? 0) + 1}`,
       },
       ariaLabel: {
+        generation: { required: false },
         type: "translatableString",
         label: msg("fields.ariaLabel", "Aria Label"),
         filter: { types: ["type.string"] },
@@ -169,11 +182,20 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
         options: ThemeOptions.CTA_VARIANT,
       },
       presetImage: {
+        generation: {
+          required: false,
+          instructions:
+            "Selects the preset artwork only. To display it, set data.actionType to link. For a manual CTA (data.entityField.constantValueEnabled true), set data.entityField.constantValue.ctaType to presetImage; for an entity-bound CTA, set data.entityField.selectedType to presetImage. Preserve the existing source and destination. Changing this field alone does not activate the icon.",
+        },
         type: "basicSelector",
         label: msg("fields.presetImage", "Preset Image"),
         options: "PRESET_IMAGE",
       },
       color: {
+        generation: {
+          instructions:
+            "CTA background color. The renderer automatically uses this color's contrastingColor for the CTA label and icon.",
+        },
         type: "basicSelector",
         label: msg("fields.color", "Color"),
         options: "SITE_COLOR",

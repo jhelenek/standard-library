@@ -166,6 +166,7 @@ const testimonialCardFields: YextFields<TestimonialCardProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -175,9 +176,27 @@ const testimonialCardFields: YextFields<TestimonialCardProps> = {
   slots: {
     type: "object",
     objectFields: {
-      DescriptionSlot: { type: "slot" },
-      ContributorNameSlot: { type: "slot" },
-      ContributionDateSlot: { type: "slot" },
+      DescriptionSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["BodyTextSlot"],
+      },
+      ContributorNameSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      ContributionDateSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["Timestamp"],
+      },
     },
     visible: false,
   },
@@ -330,11 +349,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
-    slots: {
-      DescriptionSlot: [],
-      ContributorNameSlot: [],
-      ContributionDateSlot: [],
-    },
+    slots: defaultTestimonialCardSlotData().props.slots,
   },
   resolveData: (data, params) => {
     const field = data.props.field ?? "";

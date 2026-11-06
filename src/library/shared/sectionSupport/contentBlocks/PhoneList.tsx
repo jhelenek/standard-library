@@ -45,6 +45,10 @@ export const phoneListFields: YextFields<PhoneListProps> = {
     label: msg("fields.data", "Data"),
     objectFields: {
       phoneNumbers: {
+        generation: {
+          instructions:
+            "Phone fields and their labels. Preserve existing constants; never invent a number.",
+        },
         type: "array",
         label: msg("fields.phoneNumbers", "Phone Numbers"),
         arrayFields: PhoneDataFields,

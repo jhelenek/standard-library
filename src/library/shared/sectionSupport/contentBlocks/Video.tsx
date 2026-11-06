@@ -6,7 +6,17 @@ import {
   YextFields,
 } from "@yext/visual-editor";
 import { VideoAtom } from "../atoms/video.tsx";
+import { inferFieldZodSchema } from "@yext/visual-editor/section-library-support";
 
+export const assetVideoSchema = inferFieldZodSchema({
+  type: "video",
+  generation: {
+    required: true,
+    instructions: "Use the YouTube embed URL for video.embeddedUrl.",
+  },
+});
+
+// An unset video may be omitted or saved as an empty asset object.
 export type VideoProps = {
   data: {
     /** The embedded YouTube video */

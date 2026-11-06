@@ -10,10 +10,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import "pure-react-carousel/dist/react-carousel.es.css";
-
 import { PageSection } from "../shared/sectionSupport/atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../shared/sectionSupport/atoms/visibilityWrapper.tsx";
-
 import { HeadingTextProps } from "./HeadingText.tsx";
 import { PhotoGalleryWrapperProps } from "../shared/sectionSupport/pageSections/PhotoGallerySection/PhotoGalleryWrapper.tsx";
 import { photoGallerySource } from "../shared/sectionSupport/pageSections/PhotoGallerySection/photoGallerySource.ts";
@@ -24,7 +22,6 @@ import {
   withMappedEntityFieldConditionalRender,
 } from "../shared/sectionSupport/pageSections/entityFieldSectionUtils.ts";
 import { getPhotoGalleryImageData } from "../shared/sectionSupport/pageSections/PhotoGallerySection/photoGalleryUtils.ts";
-
 import { useMappedEntitySectionEmptyState } from "../shared/sectionSupport/pageSections/useMappedEntitySectionEmptyState.ts";
 
 export interface PhotoGalleryStyles {
@@ -76,6 +73,7 @@ const photoGallerySectionFields: YextFields<PhotoGallerySectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -101,8 +99,20 @@ const photoGallerySectionFields: YextFields<PhotoGallerySectionProps> = {
   slots: {
     type: "object",
     objectFields: {
-      HeadingSlot: { type: "slot" },
-      PhotoGalleryWrapper: { type: "slot" },
+      HeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      PhotoGalleryWrapper: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["PhotoGalleryWrapper"],
+      },
     },
     visible: false,
   },
@@ -161,6 +171,9 @@ export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> 
   {
     label: msg("components.photoGallery", "Photo Gallery"),
     fields: photoGallerySectionFields,
+    layoutGenerationMetadata: {
+      resolvedProps: ["/conditionalRender"],
+    },
     defaultProps: {
       styles: {
         variant: "gallery",

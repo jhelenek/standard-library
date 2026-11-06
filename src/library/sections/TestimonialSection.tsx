@@ -72,6 +72,7 @@ const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -86,8 +87,20 @@ const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
   slots: {
     type: "object",
     objectFields: {
-      SectionHeadingSlot: { type: "slot" },
-      CardsWrapperSlot: { type: "slot" },
+      SectionHeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      CardsWrapperSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["TestimonialCardsWrapper"],
+      },
     },
     visible: false,
   },
@@ -97,6 +110,7 @@ const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
     visible: false,
     objectFields: {
       scope: {
+        generation: { required: false },
         label: msg("fields.scope", "Scope"),
         type: "text",
       },

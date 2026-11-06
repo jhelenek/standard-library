@@ -95,12 +95,18 @@ export const faqCardsSource = createSlottedItemSource<FAQStruct, FAQCardProps>({
 });
 
 const FAQsSectionFields: YextFields<FAQSectionProps> = {
-  data: faqCardsSource.field,
+  data: {
+    ...faqCardsSource.field,
+    generation: {
+      instructions: "Card references are assigned automatically.",
+    },
+  },
   styles: {
     type: "object",
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -115,8 +121,20 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
   slots: {
     type: "object",
     objectFields: {
-      HeadingSlot: { type: "slot", allow: [] },
-      CardSlot: { type: "slot", allow: [] },
+      HeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      CardSlot: {
+        generation: {
+          instructions: "Leave empty or select defaults in linked mode.",
+        },
+        type: "slot",
+        allow: [],
+      },
     },
     visible: false,
   },
@@ -126,6 +144,7 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
     visible: false,
     objectFields: {
       scope: {
+        generation: { required: false },
         label: msg("fields.scope", "Scope"),
         type: "text",
       },
@@ -178,6 +197,9 @@ const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
 export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   label: msg("components.faqs", "FAQs"),
   fields: FAQsSectionFields,
+  layoutGenerationMetadata: {
+    slottedItemSource: faqCardsSource.generationMetadata,
+  },
   defaultProps: {
     ...faqCardsSource.defaultWrapperProps,
     slots: {

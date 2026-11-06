@@ -54,6 +54,7 @@ const staticMapSectionFields: YextFields<StaticMapSectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",

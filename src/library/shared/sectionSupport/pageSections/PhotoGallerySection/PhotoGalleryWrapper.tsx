@@ -18,13 +18,11 @@ import {
 } from "@yext/visual-editor";
 import { Image } from "../../atoms/image.tsx";
 import { CTA } from "../../atoms/cta.tsx";
-
 import { PuckComponent } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
 import { photoGallerySource } from "./photoGallerySource.ts";
 import React, { cloneElement } from "react";
 import { useTranslation } from "react-i18next";
-
 import {
   CarouselProvider,
   Slider,
@@ -103,6 +101,7 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       columns: {
+        generation: { required: false },
         label: msg("fields.columns", "Columns"),
         type: "select",
         options: [
@@ -125,6 +124,7 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
         },
       },
       imageFillType: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.imageFillType", "Image Fill Type"),
         options: [
@@ -547,6 +547,9 @@ export const PhotoGalleryWrapper: YextComponentConfig<PhotoGalleryWrapperProps> 
   {
     label: msg("components.gallery", "Gallery"),
     fields: photoGalleryWrapperFields,
+    layoutGenerationMetadata: {
+      resolvedProps: ["/parentData/variant"],
+    },
     defaultProps: {
       data: { images: photoGallerySource.defaultValue },
       styles: {

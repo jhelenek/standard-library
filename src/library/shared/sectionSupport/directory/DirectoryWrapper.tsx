@@ -2,6 +2,8 @@ import React from "react";
 import { FieldLabel, PuckComponent, Slot } from "@puckeditor/core";
 import {
   backgroundColors,
+  entityFieldZodSchema,
+  translatableStringZodSchema,
   ThemeColor,
   ThemeOptions,
   msg,
@@ -22,7 +24,6 @@ import {
   YextAutoField,
   createSlottedItemSource,
   resolveComponentData,
-  syncLinkedSlotMappedCards,
   YextComponentConfig,
   type YextCustomFieldRenderProps,
   type YextFieldDefinition,
@@ -43,6 +44,7 @@ import {
 } from "./directoryChildReference.tsx";
 import { FaInfoCircle } from "react-icons/fa";
 import type { DirectoryStyles } from "./Directory.tsx";
+import { z } from "zod";
 
 export type DirectoryGridProps = {
   data: typeof directoryCardsSource.value;
@@ -86,9 +88,17 @@ const DirectoryFieldTooltip = () => {
   );
 };
 
+const linkOverrideSchema = entityFieldZodSchema(
+  translatableStringZodSchema
+).extend({
+  enabled: z.boolean(),
+  normalizeLink: z.boolean(),
+});
+
 const linkOverrideField: YextFieldDefinition<
   DirectoryCardProps["data"]["linkOverride"]
 > = {
+  generation: { schema: linkOverrideSchema.optional() },
   type: "custom",
   render: ({
     value,
@@ -323,6 +333,10 @@ export const DirectoryList = ({
 const directoryGridFields: YextFields<DirectoryGridProps> = {
   data: {
     ...directoryCardsSource.field,
+    generation: {
+      required: false,
+      instructions: "Omitted bindings use dm_directoryChildren.",
+    },
     disableConstantValueToggle: true,
     fixedRepeatedField: "dm_directoryChildren",
     hideRequirementsTooltip: true,
@@ -332,6 +346,7 @@ const directoryGridFields: YextFields<DirectoryGridProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -341,11 +356,19 @@ const directoryGridFields: YextFields<DirectoryGridProps> = {
   slots: {
     type: "object",
     objectFields: {
-      CardSlot: { type: "slot", allow: [] },
+      CardSlot: {
+        generation: {
+          instructions:
+            "Membership and order follow sorted directory children.",
+        },
+        type: "slot",
+        allow: ["DirectoryCard"],
+      },
     },
     visible: false,
   },
   manualSlots: {
+    generation: { exclude: true },
     type: "object",
     objectFields: {
       CardSlot: { type: "slot", allow: [] },
@@ -392,7 +415,19 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
     },
   },
   resolveData: (data, params) => {
-    const streamDocument = params.metadata.streamDocument;
+    const streamDocument = params.metadata?.streamDocument;
+    const normalizedData = getNormalizedDirectoryGridData(data.props.data);
+    data = { ...data, props: { ...data.props, data: normalizedData } };
+
+    if (
+      Array.isArray(streamDocument?.dm_directoryChildren) &&
+      streamDocument.dm_directoryChildren.length === 0
+    ) {
+      return {
+        ...data,
+        props: { ...data.props, slots: { ...data.props.slots, CardSlot: [] } },
+      };
+    }
 
     if (
       !streamDocument?.dm_directoryChildren ||
@@ -404,7 +439,6 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
     const sortedDirectoryChildren = getSortedDirectoryChildren(
       streamDocument.dm_directoryChildren
     );
-    const normalizedData = getNormalizedDirectoryGridData(data.props.data);
     const titleField = normalizedData.mappings?.cardTitle.constantValueEnabled
       ? ""
       : normalizedData.mappings?.cardTitle.field || "name";
@@ -412,26 +446,30 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
       ...streamDocument,
       dm_directoryChildren: sortedDirectoryChildren,
     });
-    const firstCardProps = data.props.slots?.CardSlot?.[0]?.props;
-    const updatedCards = syncLinkedSlotMappedCards({
-      items: sortedDirectoryChildren.map((child, index) => ({
-        child,
-        childIndex: index,
-      })),
-      currentCards: data.props.slots.CardSlot,
-      createCard: (id, index) =>
-        defaultDirectoryCardSlotData(
-          id,
-          index,
-          createDirectoryChildReference(sortedDirectoryChildren[index], index),
-          firstCardProps?.styles,
-          firstCardProps?.slots
-        ),
-      toParentData: ({ child, childIndex }) => ({
-        childRef: createDirectoryChildReference(child, childIndex),
-      }),
-      normalizeId: (id) => `DirectoryCard-${id}`,
-    }).map((card, index) => {
+    const currentCards = data.props.slots?.CardSlot ?? [];
+    const firstCardProps = currentCards[0]?.props;
+    const usedCards = new Set<number>();
+    const updatedCards = sortedDirectoryChildren.map((child, index) => {
+      // Stable child ids keep customization attached to the same entity. Legacy
+      // cards without references retain their positional/template behavior.
+      const existingIndex = currentCards.findIndex((card, cardIndex) => {
+        if (usedCards.has(cardIndex)) return false;
+        const reference = card.props.parentData?.childRef;
+        return reference?.childId
+          ? reference.childId === child.id
+          : (reference?.childIndex ?? cardIndex) === index;
+      });
+      if (existingIndex >= 0) usedCards.add(existingIndex);
+      const card =
+        existingIndex >= 0
+          ? currentCards[existingIndex]
+          : defaultDirectoryCardSlotData(
+              `DirectoryCard-${crypto.randomUUID()}`,
+              index,
+              undefined,
+              firstCardProps?.styles,
+              firstCardProps?.slots
+            );
       const cardTitle =
         titleItems[index]?.cardTitle !== undefined
           ? resolveComponentData(
@@ -441,12 +479,16 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
               { output: "plainText" }
             )
           : "[[name]]";
-      const cardSlots = card.props.slots ?? {};
+      const cardSlots = (card.props.slots ?? {}) as Partial<
+        DirectoryCardProps["slots"]
+      >;
 
       return {
         ...card,
         props: {
           ...card.props,
+          index,
+          parentData: { childRef: createDirectoryChildReference(child, index) },
           field: titleField,
           data: {
             ...card.props.data,

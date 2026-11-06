@@ -60,11 +60,17 @@ type HoursTableStyleFieldProps = Omit<HoursTableProps["styles"], "alignment">;
 // HoursTable style fields used in HoursTable and CoreInfoSection
 export const HoursTableStyleFields: YextFields<HoursTableStyleFieldProps> = {
   startOfWeek: {
+    generation: {
+      instructions: "First day displayed; today follows the current day.",
+    },
     type: "basicSelector",
     label: msg("fields.startOfTheWeek", "Start of the Week"),
     options: "HOURS_OPTIONS",
   },
   collapseDays: {
+    generation: {
+      instructions: "Combine consecutive days with matching hours.",
+    },
     label: msg("fields.collapseDays", "Collapse Days"),
     type: "radio",
     options: [
@@ -73,6 +79,9 @@ export const HoursTableStyleFields: YextFields<HoursTableStyleFieldProps> = {
     ],
   },
   showAdditionalHoursText: {
+    generation: {
+      instructions: "Show the entity's additionalHoursText below the table.",
+    },
     label: msg(
       "fields.options.showAdditionalHoursText",
       "Show Additional Hours Text"

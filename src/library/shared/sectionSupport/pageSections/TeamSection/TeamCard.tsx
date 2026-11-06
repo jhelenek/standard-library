@@ -255,6 +255,7 @@ const teamCardFields: YextFields<TeamCardProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -264,12 +265,48 @@ const teamCardFields: YextFields<TeamCardProps> = {
   slots: {
     type: "object",
     objectFields: {
-      ImageSlot: { type: "slot" },
-      NameSlot: { type: "slot" },
-      TitleSlot: { type: "slot" },
-      PhoneSlot: { type: "slot" },
-      EmailSlot: { type: "slot" },
-      CTASlot: { type: "slot" },
+      ImageSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["ImageSlot"],
+      },
+      NameSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      TitleSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["TextSlot"],
+      },
+      PhoneSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["PhoneNumbersSlot"],
+      },
+      EmailSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["EmailsSlot"],
+      },
+      CTASlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["CTASlot"],
+      },
     },
     visible: false,
   },
@@ -448,14 +485,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
-    slots: {
-      ImageSlot: [],
-      NameSlot: [],
-      TitleSlot: [],
-      PhoneSlot: [],
-      EmailSlot: [],
-      CTASlot: [],
-    },
+    slots: defaultTeamCardSlotData().props.slots,
   },
   resolveData: (data, params) => {
     const field = data.props.field ?? "";

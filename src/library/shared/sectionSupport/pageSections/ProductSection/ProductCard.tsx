@@ -280,6 +280,7 @@ const ProductCardFields: YextFields<ProductCardProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -289,12 +290,48 @@ const ProductCardFields: YextFields<ProductCardProps> = {
   slots: {
     type: "object",
     objectFields: {
-      ImageSlot: { type: "slot" },
-      BrowSlot: { type: "slot" },
-      TitleSlot: { type: "slot" },
-      PriceSlot: { type: "slot" },
-      DescriptionSlot: { type: "slot" },
-      CTASlot: { type: "slot" },
+      ImageSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["ImageSlot"],
+      },
+      BrowSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["TextSlot"],
+      },
+      TitleSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      PriceSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["TextSlot"],
+      },
+      DescriptionSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["BodyTextSlot"],
+      },
+      CTASlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["CTASlot"],
+      },
     },
     visible: false,
   },
@@ -671,14 +708,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
-    slots: {
-      ImageSlot: [],
-      BrowSlot: [],
-      TitleSlot: [],
-      PriceSlot: [],
-      DescriptionSlot: [],
-      CTASlot: [],
-    },
+    slots: defaultProductCardSlotData().props.slots,
   },
   render: (props) => <ProductCardComponent {...props} />,
 };

@@ -87,7 +87,9 @@ const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
   slots: {
     type: "object",
     objectFields: {
-      CardSlot: { type: "slot" },
+      CardSlot: {
+        type: "slot",
+      },
     },
     visible: false,
   },
@@ -148,6 +150,9 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
   {
     label: msg("slots.productCards", "Product Cards"),
     fields: productCardsWrapperFields,
+    layoutGenerationMetadata: {
+      slottedItemSource: productCardsSource.generationMetadata,
+    },
     defaultProps: {
       ...productCardsSource.defaultWrapperProps,
       styles: {

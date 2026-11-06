@@ -77,6 +77,7 @@ const coreInfoSectionFields: YextFields<CoreInfoSectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -86,14 +87,62 @@ const coreInfoSectionFields: YextFields<CoreInfoSectionProps> = {
   slots: {
     type: "object",
     objectFields: {
-      CoreInfoHeadingSlot: { type: "slot" },
-      CoreInfoAddressSlot: { type: "slot" },
-      CoreInfoPhoneNumbersSlot: { type: "slot" },
-      CoreInfoEmailsSlot: { type: "slot" },
-      HoursHeadingSlot: { type: "slot" },
-      HoursTableSlot: { type: "slot" },
-      ServicesHeadingSlot: { type: "slot" },
-      TextListSlot: { type: "slot" },
+      CoreInfoHeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      CoreInfoAddressSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["AddressSlot"],
+      },
+      CoreInfoPhoneNumbersSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["PhoneNumbersSlot"],
+      },
+      CoreInfoEmailsSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["EmailsSlot"],
+      },
+      HoursHeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      HoursTableSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HoursTableSlot"],
+      },
+      ServicesHeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      TextListSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["TextListSlot"],
+      },
     },
     visible: false,
   },
@@ -103,6 +152,9 @@ const coreInfoSectionFields: YextFields<CoreInfoSectionProps> = {
     visible: false,
     objectFields: {
       scope: {
+        generation: {
+          required: false,
+        },
         label: msg("fields.scope", "Scope"),
         type: "text",
       },

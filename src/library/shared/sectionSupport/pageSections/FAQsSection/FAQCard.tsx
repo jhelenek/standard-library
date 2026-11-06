@@ -17,7 +17,6 @@ import {
   YextComponentConfig,
   YextFields,
 } from "@yext/visual-editor";
-
 import {
   AccordionContent,
   AccordionItem,
@@ -125,11 +124,13 @@ const FAQCardFields: YextFields<FAQCardProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       questionVariant: {
+        generation: { nullable: true },
         label: msg("fields.questionVariant", "Question Variant"),
         type: "radio",
         options: ThemeOptions.BODY_VARIANT,
       },
       answerVariant: {
+        generation: { nullable: true },
         label: msg("fields.answerVariant", "Answer Variant"),
         type: "radio",
         options: ThemeOptions.BODY_VARIANT,

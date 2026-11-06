@@ -78,6 +78,7 @@ export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
         },
       },
       link: {
+        generation: { required: false },
         type: "translatableString",
         label: msg("fields.link", "Link"),
       },
@@ -91,6 +92,7 @@ export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
     },
   },
   showImageConstrain: {
+    generation: { exclude: true },
     label: msg("fields.showImageConstrain", "Show Image Constrain"),
     type: "radio",
     options: [

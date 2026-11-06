@@ -84,7 +84,9 @@ const insightCardsWrapperFields: YextFields<InsightCardsWrapperProps> = {
   slots: {
     type: "object",
     objectFields: {
-      CardSlot: { type: "slot" },
+      CardSlot: {
+        type: "slot",
+      },
     },
     visible: false,
   },
@@ -140,6 +142,9 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
   {
     label: msg("slots.insightCards", "Insight Cards"),
     fields: insightCardsWrapperFields,
+    layoutGenerationMetadata: {
+      slottedItemSource: insightCardsSource.generationMetadata,
+    },
     defaultProps: {
       ...insightCardsSource.defaultWrapperProps,
       styles: {

@@ -80,7 +80,9 @@ const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
   slots: {
     type: "object",
     objectFields: {
-      CardSlot: { type: "slot" },
+      CardSlot: {
+        type: "slot",
+      },
     },
     visible: false,
   },
@@ -135,6 +137,9 @@ const TeamCardsWrapperComponent: PuckComponent<TeamCardsWrapperProps> = (
 export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
   label: msg("components.teamCardsWrapper", "Team Cards"),
   fields: teamCardsWrapperFields,
+  layoutGenerationMetadata: {
+    slottedItemSource: teamCardsSource.generationMetadata,
+  },
   defaultProps: {
     ...teamCardsSource.defaultWrapperProps,
     styles: {

@@ -53,6 +53,8 @@ import {
   hoursTableFields,
   HoursTable,
 } from "../../../../sections/HoursTable.tsx";
+import { z } from "zod";
+import { inferFieldZodSchema } from "@yext/visual-editor/section-library-support";
 
 export type AboutSectionDetailsColumnProps = {
   sections: DetailSection[];
@@ -188,24 +190,80 @@ export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
     },
   };
 
+const detailContentFields: Record<
+  DetailSection["content"]["type"],
+  YextFields
+> = {
+  hoursStatus: hoursStatusWrapperFields,
+  hoursTable: hoursTableFields,
+  address: addressFields,
+  phone: PhoneFields,
+  emails: EmailsFields,
+  textList: textListFields,
+  socialMedia: FooterSocialLinksSlotFields,
+};
+
 const typeToFields = (
   type: DetailSection["content"]["type"],
   data: DetailSection["content"]
 ) => {
-  const fields: Record<DetailSection["content"]["type"], YextFields> = {
-    hoursStatus: hoursStatusWrapperFields,
-    hoursTable: hoursTableFields,
-    address:
-      "address" in data && data.address
-        ? resolveAddressFields({ props: { id: "", ...data.address } })
-        : addressFields,
-    phone: PhoneFields,
-    emails: EmailsFields,
-    textList: textListFields,
-    socialMedia: FooterSocialLinksSlotFields,
-  };
-  return fields[type];
+  if (type === "address" && data.address) {
+    return resolveAddressFields({ props: { id: "", ...data.address } });
+  }
+  return detailContentFields[type];
 };
+
+export const detailContentSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("hoursStatus"),
+    hoursStatus: inferFieldZodSchema(
+      { type: "object", objectFields: detailContentFields.hoursStatus },
+      { defaultValue: defaultAboutSectionProps.hoursStatus }
+    ),
+  }),
+  z.object({
+    type: z.literal("hoursTable"),
+    hoursTable: inferFieldZodSchema(
+      { type: "object", objectFields: detailContentFields.hoursTable },
+      { defaultValue: defaultAboutSectionProps.hoursTable }
+    ),
+  }),
+  z.object({
+    type: z.literal("address"),
+    address: inferFieldZodSchema(
+      { type: "object", objectFields: detailContentFields.address },
+      { defaultValue: defaultAboutSectionProps.address }
+    ),
+  }),
+  z.object({
+    type: z.literal("phone"),
+    phone: inferFieldZodSchema(
+      { type: "object", objectFields: detailContentFields.phone },
+      { defaultValue: defaultAboutSectionProps.phone }
+    ),
+  }),
+  z.object({
+    type: z.literal("emails"),
+    emails: inferFieldZodSchema(
+      { type: "object", objectFields: detailContentFields.emails },
+      { defaultValue: defaultAboutSectionProps.emails }
+    ),
+  }),
+  z.object({
+    type: z.literal("textList"),
+    textList: inferFieldZodSchema(
+      { type: "object", objectFields: detailContentFields.textList },
+      { defaultValue: defaultAboutSectionProps.textList }
+    ),
+  }),
+  z.object({
+    type: z.literal("socialMedia"),
+    socialMedia: inferFieldZodSchema(
+      { type: "object", objectFields: detailContentFields.socialMedia },
+      { defaultValue: defaultAboutSectionProps.socialMedia }
+    ),
+  }),
+]);
 
 const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps> =
   {
@@ -221,6 +279,7 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
           },
         },
         content: {
+          generation: { schema: detailContentSchema },
           type: "custom",
           label: msg("fields.content", "Content"),
           render: ({

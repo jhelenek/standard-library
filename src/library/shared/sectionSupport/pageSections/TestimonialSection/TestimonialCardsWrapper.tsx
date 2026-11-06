@@ -76,7 +76,9 @@ const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
     slots: {
       type: "object",
       objectFields: {
-        CardSlot: { type: "slot" },
+        CardSlot: {
+          type: "slot",
+        },
       },
       visible: false,
     },
@@ -117,6 +119,9 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
   {
     label: msg("components.testimonialCardsWrapper", "Testimonial Cards"),
     fields: testimonialCardsWrapperFields,
+    layoutGenerationMetadata: {
+      slottedItemSource: testimonialCardsSource.generationMetadata,
+    },
     defaultProps: {
       ...testimonialCardsSource.defaultWrapperProps,
       styles: {

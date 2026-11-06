@@ -60,6 +60,7 @@ const nearbyLocationsSectionFields: YextFields<NearbyLocationsSectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -77,6 +78,7 @@ const nearbyLocationsSectionFields: YextFields<NearbyLocationsSectionProps> = {
     visible: false,
     objectFields: {
       scope: {
+        generation: { required: false },
         label: msg("fields.scope", "Scope"),
         type: "text",
       },
@@ -85,8 +87,20 @@ const nearbyLocationsSectionFields: YextFields<NearbyLocationsSectionProps> = {
   slots: {
     type: "object",
     objectFields: {
-      SectionHeadingSlot: { type: "slot" },
-      CardsWrapperSlot: { type: "slot" },
+      SectionHeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      CardsWrapperSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["NearbyLocationCardsWrapper"],
+      },
     },
     visible: false,
   },

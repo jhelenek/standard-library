@@ -1,5 +1,4 @@
 import { gridAtomPermissions } from "../shared/gridAtomPermissions.ts";
-import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import {
   useDocument,

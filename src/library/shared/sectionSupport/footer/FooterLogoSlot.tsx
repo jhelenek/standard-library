@@ -1,4 +1,3 @@
-import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { getImageAltText, Image } from "../atoms/image.tsx";
@@ -113,9 +112,15 @@ export const FooterLogoSlot: YextComponentConfig<FooterLogoSlotProps> = {
       type: "object",
       label: msg("fields.styles", "Styles"),
       objectFields: {
-        imageFillType: ImageStylingFields.imageFillType,
-        width: ImageStylingFields.width,
-        aspectRatio: ImageStylingFields.aspectRatio,
+        imageFillType: {
+          ...ImageStylingFields.imageFillType,
+          generation: { required: false },
+        },
+        width: { ...ImageStylingFields.width, generation: { required: false } },
+        aspectRatio: {
+          ...ImageStylingFields.aspectRatio,
+          generation: { required: false },
+        },
       },
     },
   },

@@ -74,6 +74,7 @@ const aboutSectionFields: YextFields<AboutSectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -94,13 +95,25 @@ const aboutSectionFields: YextFields<AboutSectionProps> = {
     type: "object",
     objectFields: {
       SectionHeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
         type: "slot",
+        allow: ["HeadingTextSlot"],
       },
       DescriptionSlot: {
+        generation: {
+          singleChild: true,
+        },
         type: "slot",
+        allow: ["BodyTextSlot"],
       },
       SidebarSlot: {
+        generation: {
+          singleChild: true,
+        },
         type: "slot",
+        allow: ["AboutSectionDetailsColumn"],
       },
     },
     visible: false,

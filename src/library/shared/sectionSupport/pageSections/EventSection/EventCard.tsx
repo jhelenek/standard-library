@@ -249,6 +249,7 @@ const eventCardFields: YextFields<EventCardProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -266,11 +267,41 @@ const eventCardFields: YextFields<EventCardProps> = {
   slots: {
     type: "object",
     objectFields: {
-      ImageSlot: { type: "slot" },
-      TitleSlot: { type: "slot" },
-      DateTimeSlot: { type: "slot" },
-      DescriptionSlot: { type: "slot" },
-      CTASlot: { type: "slot" },
+      ImageSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["ImageSlot"],
+      },
+      TitleSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      DateTimeSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["Timestamp"],
+      },
+      DescriptionSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["BodyTextSlot"],
+      },
+      CTASlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["CTASlot"],
+      },
     },
     visible: false,
   },
@@ -433,13 +464,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       backgroundColor: backgroundColors.background1.value,
       truncateDescription: true,
     },
-    slots: {
-      ImageSlot: [],
-      TitleSlot: [],
-      DateTimeSlot: [],
-      DescriptionSlot: [],
-      CTASlot: [],
-    },
+    slots: defaultEventCardSlotData().props.slots,
   },
   resolveData: (data, params) => {
     const field = data.props.field ?? "";

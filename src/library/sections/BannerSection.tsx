@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
 import "@yext/visual-editor/style.css";
 import {
   YextEntityField,
@@ -39,7 +38,7 @@ export interface BannerData {
 export interface BannerStyles {
   /**
    * The background color of the section.
-   * @defaultValue Background Color 6
+   * @defaultValue Background Color 1
    */
   backgroundColor?: ThemeColor;
 
@@ -101,6 +100,7 @@ const bannerSectionFields: YextFields<BannerSectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Slot, PuckComponent, setDeep } from "@puckeditor/core";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
@@ -80,8 +79,20 @@ const secondaryFooterSlotFields: YextFields<SecondaryFooterSlotProps> = {
   slots: {
     type: "object",
     objectFields: {
-      SecondaryLinksWrapperSlot: { type: "slot" },
-      CopyrightSlot: { type: "slot" },
+      SecondaryLinksWrapperSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["FooterLinksSlot"],
+      },
+      CopyrightSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["CopyrightMessageSlot"],
+      },
     },
     visible: false,
   },

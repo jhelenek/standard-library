@@ -38,6 +38,9 @@ export const textListFields: YextFields<TextListProps> = {
     },
   },
   commaSeparated: {
+    generation: {
+      instructions: "Display items inline with commas instead of bullets.",
+    },
     label: msg("fields.commaSeparated", "Comma Separated"),
     type: "radio",
     options: [
@@ -46,6 +49,7 @@ export const textListFields: YextFields<TextListProps> = {
     ],
   },
   styles: {
+    generation: { required: false },
     type: "object",
     label: msg("fields.styles", "Styles"),
     objectFields: {

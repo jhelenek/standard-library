@@ -1,4 +1,3 @@
-import React from "react";
 import { Slot, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
@@ -316,6 +315,7 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
       label: msg("fields.styles", "Styles"),
       objectFields: {
         backgroundColor: {
+          generation: { required: false },
           type: "basicSelector",
           label: msg("fields.backgroundColor", "Background Color"),
           options: "BACKGROUND_COLOR",
@@ -358,21 +358,25 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
           options: ThemeOptions.VERTICAL_POSITION,
         },
         showBusinessName: {
+          generation: { required: false },
           label: msg("fields.showBusinessName", "Show Business Name"),
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
         },
         showCredentials: {
+          generation: { required: false },
           label: msg("fields.showCredentials", "Show Credentials"),
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
         },
         showProfessionalTitle: {
+          generation: { required: false },
           label: msg("fields.showProfessionalTitle", "Show Professional Title"),
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
         },
         showSubtitle: {
+          generation: { required: false },
           label: msg("fields.showSubtitle", "Show Subtitle"),
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
@@ -404,26 +408,31 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
           options: "SITE_COLOR",
         },
         showAddress: {
+          generation: { required: false },
           label: msg("fields.showAddress", "Show Address"),
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
         },
         showPrimaryCTA: {
+          generation: { required: false },
           label: msg("fields.showPrimaryCTA", "Show Primary CTA"),
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
         },
         showSecondaryCTA: {
+          generation: { required: false },
           label: msg("fields.showSecondaryCTA", "Show Secondary CTA"),
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
         },
         showPhone: {
+          generation: { required: false },
           label: msg("fields.showPhone", "Show Phone"),
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
         },
         showEmail: {
+          generation: { required: false },
           label: msg("fields.showEmail", "Show Email"),
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
@@ -433,17 +442,83 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
     slots: {
       type: "object",
       objectFields: {
-        ImageSlot: { type: "slot" },
-        BusinessNameSlot: { type: "slot" },
-        CredentialsSlot: { type: "slot" },
-        ProfessionalNameSlot: { type: "slot" },
-        ProfessionalTitleSlot: { type: "slot" },
-        SubtitleSlot: { type: "slot" },
-        AddressSlot: { type: "slot" },
-        PrimaryCTASlot: { type: "slot" },
-        SecondaryCTASlot: { type: "slot" },
-        PhoneSlot: { type: "slot" },
-        EmailSlot: { type: "slot" },
+        ImageSlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["HeroImageSlot"],
+        },
+        BusinessNameSlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["BodyTextSlot"],
+        },
+        CredentialsSlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["HeadingTextSlot"],
+        },
+        ProfessionalNameSlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["HeadingTextSlot"],
+        },
+        ProfessionalTitleSlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["HeadingTextSlot"],
+        },
+        SubtitleSlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["BodyTextSlot"],
+        },
+        AddressSlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["AddressSlot"],
+        },
+        PrimaryCTASlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["CTASlot"],
+        },
+        SecondaryCTASlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["CTASlot"],
+        },
+        PhoneSlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["PhoneNumbersSlot"],
+        },
+        EmailSlot: {
+          generation: {
+            singleChild: true,
+          },
+          type: "slot",
+          allow: ["EmailsSlot"],
+        },
       },
       visible: false,
     },
@@ -453,12 +528,14 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
       visible: false,
       objectFields: {
         scope: {
+          generation: { required: false },
           label: msg("fields.scope", "Scope"),
           type: "text",
         },
       },
     },
     liveVisibility: {
+      generation: { required: false },
       label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
       type: "radio",
       options: [

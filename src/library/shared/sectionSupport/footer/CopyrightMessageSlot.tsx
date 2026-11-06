@@ -1,4 +1,3 @@
-import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
 import {
@@ -94,6 +93,9 @@ export const defaultCopyrightMessageSlotProps: CopyrightMessageSlotProps = {
 export const CopyrightMessageSlot: YextComponentConfig<CopyrightMessageSlotProps> =
   {
     label: msg("components.copyrightMessage", "Copyright Message"),
+    layoutGenerationMetadata: {
+      resolvedProps: ["/desktopContentAlignment", "/mobileContentAlignment"],
+    },
     fields: {
       data: {
         type: "object",
@@ -107,6 +109,7 @@ export const CopyrightMessageSlot: YextComponentConfig<CopyrightMessageSlotProps
         },
       },
       styles: {
+        generation: { required: false },
         type: "object",
         label: msg("fields.styles", "Styles"),
         objectFields: {

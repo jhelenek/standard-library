@@ -67,6 +67,7 @@ const bodyTextFields: YextFields<BodyTextProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       variant: {
+        generation: { nullable: true },
         label: msg("fields.variant", "Variant"),
         type: "radio",
         options: ThemeOptions.BODY_VARIANT,

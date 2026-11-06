@@ -87,6 +87,7 @@ const directoryFields: YextFields<DirectoryProps> = {
         options: "SITE_COLOR",
       },
       textTransform: {
+        generation: { required: false },
         type: "select",
         label: msg("theme.textTransform.textTransform", "Text Transform"),
         options: [
@@ -111,10 +112,34 @@ const directoryFields: YextFields<DirectoryProps> = {
   slots: {
     type: "object",
     objectFields: {
-      TitleSlot: { type: "slot", allow: [] },
-      SiteNameSlot: { type: "slot", allow: [] },
-      BreadcrumbsSlot: { type: "slot", allow: [] },
-      DirectoryGrid: { type: "slot", allow: [] },
+      TitleSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      SiteNameSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      BreadcrumbsSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["BreadcrumbsSlot"],
+      },
+      DirectoryGrid: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["DirectoryGrid"],
+      },
     },
     visible: false,
   },
@@ -124,6 +149,7 @@ const directoryFields: YextFields<DirectoryProps> = {
     visible: false,
     objectFields: {
       scope: {
+        generation: { required: false },
         label: msg("fields.scope", "Scope"),
         type: "text",
       },
@@ -139,14 +165,17 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
 
   return (
     <Background background={styles.backgroundColor}>
-      <slots.BreadcrumbsSlot style={{ height: "auto" }} />
+      <slots.BreadcrumbsSlot style={{ height: "auto" }} allow={[]} />
       <PageSection className="flex flex-col items-center gap-2">
-        <slots.SiteNameSlot style={{ height: "auto", width: "100%" }} />
-        <slots.TitleSlot style={{ height: "auto", width: "100%" }} />
+        <slots.SiteNameSlot
+          style={{ height: "auto", width: "100%" }}
+          allow={[]}
+        />
+        <slots.TitleSlot style={{ height: "auto", width: "100%" }} allow={[]} />
       </PageSection>
       {streamDocument.dm_directoryChildren &&
         isDirectoryGrid(streamDocument.dm_directoryChildren) && (
-          <slots.DirectoryGrid style={{ height: "auto" }} />
+          <slots.DirectoryGrid style={{ height: "auto" }} allow={[]} />
         )}
       {streamDocument.dm_directoryChildren &&
         !isDirectoryGrid(streamDocument.dm_directoryChildren) && (
@@ -175,7 +204,7 @@ export const Directory: YextComponentConfig<DirectoryProps> = {
   fields: directoryFields,
   resolveFields: (data, params) => {
     if (
-      params.metadata.streamDocument?.dm_directoryChildren &&
+      params.metadata?.streamDocument?.dm_directoryChildren &&
       isDirectoryGrid(params.metadata.streamDocument.dm_directoryChildren)
     ) {
       const updatedFields = setDeep(

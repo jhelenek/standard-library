@@ -109,6 +109,7 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -134,6 +135,7 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
     visible: false,
     objectFields: {
       scope: {
+        generation: { required: false },
         label: msg("fields.scope", "Scope"),
         type: "text",
       },

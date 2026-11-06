@@ -1,9 +1,7 @@
-import * as React from "react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import {
   msg,
-  getMaxWidthOptions,
   YextComponentConfig,
   YextFields,
   SectionConfig,
@@ -13,6 +11,7 @@ import { cva } from "class-variance-authority";
 import { defaultPrimaryHeaderProps } from "../shared/sectionSupport/header/PrimaryHeaderSlot.tsx";
 import { defaultSecondaryHeaderProps } from "../shared/sectionSupport/header/SecondaryHeaderSlot.tsx";
 import { ExpandedHeaderMenuProvider } from "../shared/sectionSupport/header/ExpandedHeaderMenuContext.tsx";
+import { resolveCanonicalSelectorGroups } from "@yext/visual-editor/section-library-support";
 
 export const headerWrapper = cva("flex flex-col", {
   variants: {
@@ -65,18 +64,22 @@ const expandedHeaderSectionFields: YextFields<ExpandedHeaderProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       maxWidth: {
+        generation: {
+          nullable: true,
+          instructions: "Maximum width shared by both header tiers.",
+        },
         type: "basicSelector",
         label: msg("fields.maxWidth", "Max Width"),
         disableSearch: true,
-        optionGroups: [
-          {
+        optionGroups: resolveCanonicalSelectorGroups("MAX_WIDTH").map(
+          (group) => ({
+            ...group,
             description: msg(
               "maxWidthTip",
               "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
             ),
-            options: getMaxWidthOptions(),
-          },
-        ],
+          })
+        ),
       },
       headerPosition: {
         label: msg("fields.headerPosition", "Header Position"),
@@ -94,8 +97,20 @@ const expandedHeaderSectionFields: YextFields<ExpandedHeaderProps> = {
   slots: {
     type: "object",
     objectFields: {
-      PrimaryHeaderSlot: { type: "slot", allow: [] },
-      SecondaryHeaderSlot: { type: "slot", allow: [] },
+      PrimaryHeaderSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["PrimaryHeaderSlot"],
+      },
+      SecondaryHeaderSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["SecondaryHeaderSlot"],
+      },
     },
     visible: false,
   },
@@ -105,6 +120,7 @@ const expandedHeaderSectionFields: YextFields<ExpandedHeaderProps> = {
     visible: false,
     objectFields: {
       scope: {
+        generation: { required: false },
         label: msg("fields.scope", "Scope"),
         type: "text",
       },
@@ -191,8 +207,9 @@ export const ExpandedHeader: YextComponentConfig<ExpandedHeaderProps> = {
 
     // Ensure maxWidth is passed down to header slots
     if (
-      data.props.slots.PrimaryHeaderSlot[0]?.props.parentStyles?.maxWidth !==
-      data.props.styles.maxWidth
+      data.props.slots.PrimaryHeaderSlot[0] &&
+      data.props.slots.PrimaryHeaderSlot[0]?.props.parentValues?.maxWidth !==
+        data.props.styles.maxWidth
     ) {
       data = setDeep(
         data,
@@ -202,8 +219,9 @@ export const ExpandedHeader: YextComponentConfig<ExpandedHeaderProps> = {
     }
 
     if (
+      data.props.slots.SecondaryHeaderSlot[0] &&
       data.props.slots.SecondaryHeaderSlot[0]?.props.parentStyles?.maxWidth !==
-      data.props.styles.maxWidth
+        data.props.styles.maxWidth
     ) {
       data = setDeep(
         data,
@@ -212,15 +230,38 @@ export const ExpandedHeader: YextComponentConfig<ExpandedHeaderProps> = {
       );
     }
 
-    // Ensure SecondaryHeaderSlot is passed down to PrimaryHeaderSlot's parentValues
-    if (
-      data.props.slots.PrimaryHeaderSlot[0]?.props.parentValues
-        ?.SecondaryHeaderSlot !== data.props.slots.SecondaryHeaderSlot
-    ) {
+    // The menu is a separate Puck slot, so its components need distinct,
+    // stable IDs to avoid collisions with the inline secondary header.
+    if (data.props.slots.PrimaryHeaderSlot[0]) {
+      const menuSecondaryHeader = data.props.slots.SecondaryHeaderSlot.map(
+        (header, headerIndex) => {
+          const headerId =
+            header.props.id ?? `${data.props.id}-secondary-${headerIndex}`;
+          return {
+            ...header,
+            props: {
+              ...header.props,
+              id: `${headerId}-menu`,
+              slots: {
+                ...header.props.slots,
+                LinksSlot: header.props.slots.LinksSlot.map(
+                  (links: Slot[number], linksIndex: number) => ({
+                    ...links,
+                    props: {
+                      ...links.props,
+                      id: `${links.props.id ?? `${headerId}-links-${linksIndex}`}-menu`,
+                    },
+                  })
+                ),
+              },
+            },
+          };
+        }
+      );
       data = setDeep(
         data,
         "props.slots.PrimaryHeaderSlot[0].props.parentValues.SecondaryHeaderSlot",
-        data.props.slots.SecondaryHeaderSlot as Slot
+        menuSecondaryHeader
       );
     }
 

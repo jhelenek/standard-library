@@ -69,6 +69,7 @@ const secondaryHeaderSlotFields: YextFields<SecondaryHeaderSlotProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -78,7 +79,13 @@ const secondaryHeaderSlotFields: YextFields<SecondaryHeaderSlotProps> = {
   slots: {
     type: "object",
     objectFields: {
-      LinksSlot: { type: "slot", allow: [] },
+      LinksSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeaderLinks"],
+      },
     },
     visible: false,
   },

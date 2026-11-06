@@ -137,6 +137,7 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
       label: msg("fields.data", "Data"),
       objectFields: {
         title: {
+          generation: { required: false },
           type: "entityField",
           label: msg("fields.name", "Name"),
           filter: { types: ["type.string"] },
@@ -147,6 +148,7 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
           min: 0,
         },
         limit: {
+          generation: { integer: true },
           type: "number",
           label: msg("fields.limit", "Limit"),
           min: 1,
@@ -159,11 +161,13 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
       label: msg("fields.styles", "Styles"),
       objectFields: {
         backgroundColor: {
+          generation: { required: false },
           type: "basicSelector",
           label: msg("fields.backgroundColor", "Background Color"),
           options: "BACKGROUND_COLOR",
         },
         headingLevel: {
+          generation: { required: false },
           type: "basicSelector",
           label: msg("fields.headingLevel", "Heading Level"),
           options: "HEADING_LEVEL",
@@ -183,6 +187,7 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
           label: msg("fields.hours", "Hours"),
           objectFields: {
             showCurrentStatus: {
+              generation: { required: false },
               label: msg("fields.showCurrentStatus", "Show Current Status"),
               type: "radio",
               options: [
@@ -191,6 +196,7 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
               ],
             },
             timeFormat: {
+              generation: { required: false },
               label: msg("fields.timeFormat", "Time Format"),
               type: "radio",
               options: [
@@ -205,6 +211,7 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
               ],
             },
             showDayNames: {
+              generation: { required: false },
               label: msg("fields.showDayNames", "Show Day Names"),
               type: "radio",
               options: [
@@ -213,6 +220,7 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
               ],
             },
             dayOfWeekFormat: {
+              generation: { required: false },
               label: msg("fields.dayOfWeekFormat", "Day of Week Format"),
               type: "radio",
               options: [
@@ -256,6 +264,7 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
           },
         },
         address: {
+          generation: { required: false },
           type: "object",
           label: msg("fields.address", "Address"),
           objectFields: {

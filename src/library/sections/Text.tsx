@@ -1,5 +1,4 @@
 import { gridAtomPermissions } from "../shared/gridAtomPermissions.ts";
-import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import { Body, BodyProps } from "../shared/sectionSupport/atoms/body.tsx";
 import {
@@ -67,6 +66,7 @@ const textFields: YextFields<TextProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       variant: {
+        generation: { nullable: true },
         label: msg("fields.textSize", "Text Size"),
         type: "radio",
         options: ThemeOptions.BODY_VARIANT,

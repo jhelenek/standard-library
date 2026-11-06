@@ -148,6 +148,7 @@ const gridSectionFields: YextFields<GridProps> = {
     visible: false,
   },
   backgroundColor: {
+    generation: { required: false },
     type: "basicSelector",
     label: msg("fields.backgroundColor", "Background Color"),
     options: "BACKGROUND_COLOR",
@@ -176,6 +177,7 @@ const gridSectionFields: YextFields<GridProps> = {
     visible: false,
     objectFields: {
       scope: {
+        generation: { required: false },
         label: msg("fields.scope", "Scope"),
         type: "text",
       },

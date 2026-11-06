@@ -264,6 +264,7 @@ const insightCardFields: YextFields<InsightCardProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -273,12 +274,48 @@ const insightCardFields: YextFields<InsightCardProps> = {
   slots: {
     type: "object",
     objectFields: {
-      ImageSlot: { type: "slot" },
-      TitleSlot: { type: "slot" },
-      CategorySlot: { type: "slot" },
-      DescriptionSlot: { type: "slot" },
-      PublishTimeSlot: { type: "slot" },
-      CTASlot: { type: "slot" },
+      ImageSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["ImageSlot"],
+      },
+      TitleSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      CategorySlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["TextSlot"],
+      },
+      DescriptionSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["BodyTextSlot"],
+      },
+      PublishTimeSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["Timestamp"],
+      },
+      CTASlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["CTASlot"],
+      },
     },
     visible: false,
   },
@@ -446,14 +483,7 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
-    slots: {
-      ImageSlot: [],
-      TitleSlot: [],
-      CategorySlot: [],
-      DescriptionSlot: [],
-      PublishTimeSlot: [],
-      CTASlot: [],
-    },
+    slots: defaultInsightCardSlotData().props.slots,
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata?.streamDocument;

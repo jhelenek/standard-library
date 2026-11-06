@@ -25,6 +25,7 @@ import {
   useWindowWidth,
   isNonNormalizableLinkType,
   linkTypeOptions,
+  inferFieldZodSchema,
 } from "@yext/visual-editor/section-library-support";
 import {
   useExpandedHeaderMenu,
@@ -91,11 +92,17 @@ const linkFieldConfig: YextArrayField<TranslatableCTA[]> = {
       label: msg("fields.link", "Link"),
     },
     linkType: {
+      generation: {
+        required: false,
+      },
       type: "basicSelector",
       label: msg("fields.linkType", "Link Type"),
       options: linkTypeOptions(),
     },
     normalizeLink: {
+      generation: {
+        required: false,
+      },
       label: msg("fields.normalizeLink", "Normalize Link"),
       type: "radio",
       options: [
@@ -104,6 +111,9 @@ const linkFieldConfig: YextArrayField<TranslatableCTA[]> = {
       ],
     },
     openInNewTab: {
+      generation: {
+        required: false,
+      },
       label: msg("fields.openInNewTab", "Open in new tab"),
       type: "radio",
       options: [
@@ -127,6 +137,11 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
     label: msg("fields.data", "Data"),
     objectFields: {
       links: {
+        generation: {
+          schema: inferFieldZodSchema(linkFieldConfig, { defaultValue: [] }),
+          instructions:
+            "Navigation links displayed inline while space permits. Populate these with relevant navigation for the business and page using the provided content and site structure. Replace default Header Link labels and # destinations with descriptive labels and their matching URLs or page anchors. Use supported destinations rather than inventing URLs.",
+        },
         type: "custom",
         render: ({
           onChange,
@@ -155,6 +170,10 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
         },
       },
       collapsedLinks: {
+        generation: {
+          instructions:
+            "Navigation links displayed in the menu. Populate relevant additional navigation using the provided content and site structure, with descriptive labels and matching URLs or page anchors. Do not retain default Header Link labels or # destinations, invent URLs, or duplicate inline links unnecessarily.",
+        },
         ...linkFieldConfig,
         label: msg("fields.collapsedLinks", "Collapsed Links"),
       },
@@ -165,11 +184,16 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       align: {
+        generation: { required: false },
         label: msg("fields.align", "Align"),
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
       },
       variant: {
+        generation: {
+          required: false,
+          nullable: true,
+        },
         label: msg("fields.variant", "Variant"),
         type: "radio",
         options: ThemeOptions.BODY_VARIANT,
@@ -180,6 +204,7 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
         options: "SITE_COLOR",
       },
       weight: {
+        generation: { required: false },
         label: msg("fields.weight", "Weight"),
         type: "radio",
         options: [
@@ -407,6 +432,11 @@ export const HeaderLinks: YextComponentConfig<HeaderLinksProps> = {
     );
 
     return toPuckFields(updatedFields);
+  },
+  resolveData: (data, params) => {
+    const tier =
+      params.parent?.type === "SecondaryHeaderSlot" ? "Secondary" : "Primary";
+    return { ...data, props: { ...data.props, parentData: { type: tier } } };
   },
   defaultProps: defaultHeaderLinkProps,
   render: (props) => <HeaderLinksComponent {...props} />,

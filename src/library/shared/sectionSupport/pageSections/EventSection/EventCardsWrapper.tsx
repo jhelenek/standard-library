@@ -74,7 +74,9 @@ const eventCardsWrapperFields: YextFields<EventCardsWrapperProps> = {
   slots: {
     type: "object",
     objectFields: {
-      CardSlot: { type: "slot" },
+      CardSlot: {
+        type: "slot",
+      },
     },
     visible: false,
   },
@@ -121,6 +123,9 @@ const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (
 export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   label: msg("components.eventCardsWrapper", "Event Cards"),
   fields: eventCardsWrapperFields,
+  layoutGenerationMetadata: {
+    slottedItemSource: eventCardsSource.generationMetadata,
+  },
   defaultProps: {
     ...eventCardsSource.defaultWrapperProps,
     styles: {

@@ -69,10 +69,17 @@ export const EmailsFields: YextFields<EmailsProps> = {
     },
   },
   styles: {
+    generation: { required: false },
     type: "object",
     label: msg("fields.styles", "Styles"),
     objectFields: {
       listLength: {
+        generation: {
+          integer: true,
+          required: false,
+          instructions:
+            "Maximum emails displayed from an entity field; defaults to 1.",
+        },
         type: "number",
         label: msg("fields.listLength", "List Length"),
         min: 1,
@@ -80,16 +87,23 @@ export const EmailsFields: YextFields<EmailsProps> = {
         visible: false,
       },
       showIcon: {
+        generation: { required: false },
         label: msg("fields.showIcon", "Show Icon"),
         type: "radio",
         options: ThemeOptions.SHOW_HIDE,
       },
       color: {
+        generation: {
+          instructions: "Controls email link and icon background colors.",
+        },
         type: "basicSelector",
         label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
       },
       iconColor: {
+        generation: {
+          instructions: "Controls the email icon glyph color.",
+        },
         type: "basicSelector",
         label: msg("fields.iconColor", "Icon Color"),
         options: "SITE_COLOR",

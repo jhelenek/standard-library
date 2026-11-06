@@ -1,4 +1,3 @@
-import * as React from "react";
 import { PuckComponent, setDeep } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
 import { CTA } from "../atoms/cta.tsx";
@@ -260,10 +259,17 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
     label: msg("fields.data", "Data"),
     objectFields: {
       links: {
+        generation: {
+          instructions:
+            "Populate relevant footer navigation for the business and page, such as contact, company information, or legal pages when supported by the provided content and site structure. Replace default link labels and # destinations with descriptive labels and matching URLs or page anchors. Do not invent destinations or legal pages.",
+        },
         type: "array",
         label: msg("fields.links", "Links"),
         arrayFields: {
           linkType: {
+            generation: {
+              required: false,
+            },
             label: msg("fields.linkType", "Link Type"),
             type: "radio",
             options: [
@@ -288,6 +294,9 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
             type: "translatableString",
           },
           normalizeLink: {
+            generation: {
+              required: false,
+            },
             label: msg("fields.normalizeLink", "Normalize Link"),
             type: "radio",
             options: [
@@ -296,6 +305,9 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
             ],
           },
           openInNewTab: {
+            generation: {
+              required: false,
+            },
             label: msg("fields.openInNewTab", "Open in new tab"),
             type: "radio",
             options: [
@@ -320,6 +332,7 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
     options: "SITE_COLOR",
   },
   variant: {
+    generation: { exclude: true },
     type: "radio",
     options: [
       { label: "Primary", value: "primary" },
@@ -328,6 +341,7 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
     visible: false,
   },
   eventNamePrefix: {
+    generation: { exclude: true },
     type: "text",
     visible: false,
   },
@@ -336,6 +350,9 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
 export const FooterLinksSlot: YextComponentConfig<FooterLinksSlotProps> = {
   label: msg("components.footerLinksSlot", "Links"),
   fields: footerLinksSlotFields,
+  layoutGenerationMetadata: {
+    resolvedProps: ["/desktopContentAlignment", "/mobileContentAlignment"],
+  },
   resolveFields: (data) =>
     setDeep(
       toPuckFields(footerLinksSlotFields),

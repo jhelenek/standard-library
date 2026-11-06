@@ -1,4 +1,3 @@
-import * as React from "react";
 import { PuckComponent, setDeep } from "@puckeditor/core";
 import {
   msg,
@@ -120,11 +119,19 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
       label: msg("fields.data", "Data"),
       objectFields: {
         label: {
+          generation: {
+            instructions:
+              "Provide a descriptive heading for this footer link group based on its links and the business context. Replace the default section label.",
+          },
           type: "translatableString",
           label: msg("fields.label", "Label"),
           filter: { types: ["type.string"] },
         },
         links: {
+          generation: {
+            instructions:
+              "Populate relevant links for this footer group using the provided content and site structure. Replace default link labels and # destinations with descriptive labels and matching URLs or page anchors. Keep links relevant to the group heading and do not invent destinations.",
+          },
           type: "array",
           label: msg("fields.links", "Links"),
           arrayFields: {
@@ -176,6 +183,7 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
       },
     },
     styles: {
+      generation: { required: false },
       type: "object",
       label: msg("fields.styles", "Styles"),
       objectFields: {
@@ -187,6 +195,7 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
       },
     },
     index: {
+      generation: { exclude: true },
       type: "number",
       visible: false,
     },
@@ -196,6 +205,7 @@ export const FooterExpandedLinkSectionSlot: YextComponentConfig<FooterExpandedLi
   {
     label: msg("components.footerExpandedLinkSlot", "Expanded Link"),
     fields: footerExpandedLinkSectionSlotFields,
+
     resolveFields: (data) =>
       setDeep(
         toPuckFields(footerExpandedLinkSectionSlotFields),

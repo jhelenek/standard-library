@@ -42,6 +42,7 @@ const videoSectionFields: YextFields<VideoSectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -51,8 +52,20 @@ const videoSectionFields: YextFields<VideoSectionProps> = {
   slots: {
     type: "object",
     objectFields: {
-      SectionHeadingSlot: { type: "slot" },
-      VideoSlot: { type: "slot" },
+      SectionHeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      VideoSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["VideoSlot"],
+      },
     },
     visible: false,
   },

@@ -72,6 +72,7 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       showCurrentStatus: {
+        generation: { required: false },
         label: msg("fields.showCurrentStatus", "Show Current Status"),
         type: "radio",
         options: [
@@ -80,6 +81,7 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
         ],
       },
       timeFormat: {
+        generation: { required: false },
         label: msg("fields.timeFormat", "Time Format"),
         type: "radio",
         options: [
@@ -88,6 +90,7 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
         ],
       },
       showDayNames: {
+        generation: { required: false },
         label: msg("fields.showDayNames", "Show Day Names"),
         type: "radio",
         options: [
@@ -96,6 +99,7 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
         ],
       },
       dayOfWeekFormat: {
+        generation: { required: false },
         label: msg("fields.dayOfWeekFormat", "Day of Week Format"),
         type: "radio",
         options: [

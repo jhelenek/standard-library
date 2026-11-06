@@ -2,7 +2,7 @@
   "root": {
     "props": {
       "version": 83,
-      "sectionLibraryMigrationVersion": 3,
+      "sectionLibraryMigrationVersion": 4,
       "title": {
         "field": "name",
         "constantValue": "",
@@ -169,7 +169,7 @@
                     {
                       "type": "SecondaryHeaderSlot",
                       "props": {
-                        "id": "SecondaryHeaderSlot-8c8e4511-4f48-4fab-a1ac-bb0e94ba6761",
+                        "id": "SecondaryHeaderSlot-8c8e4511-4f48-4fab-a1ac-bb0e94ba6761-menu",
                         "data": {
                           "show": true,
                           "showLanguageDropdown": false
@@ -185,7 +185,7 @@
                             {
                               "type": "HeaderLinks",
                               "props": {
-                                "id": "HeaderLinks-b6a70e27-ca02-47b0-b115-8915020bc7a7",
+                                "id": "HeaderLinks-b6a70e27-ca02-47b0-b115-8915020bc7a7-menu",
                                 "data": {
                                   "links": [
                                     {
@@ -789,7 +789,11 @@
                 "backgroundImage": {
                   "field": "",
                   "constantValue": {
-                    "defaultValue": "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=900&width=1440&fit=max"
+                    "defaultValue": {
+                      "url": "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=900&width=1440&fit=max",
+                      "width": 1440,
+                      "height": 900
+                    }
                   },
                   "constantValueEnabled": true
                 }
@@ -1992,6 +1996,7 @@
                   {
                     "type": "FAQCard",
                     "props": {
+                      "slots": {},
                       "id": "FAQCard-499a5bbc-d6a4-4b7c-bd98-621d2be7425d",
                       "index": 0,
                       "data": {
@@ -2022,6 +2027,7 @@
                   {
                     "type": "FAQCard",
                     "props": {
+                      "slots": {},
                       "id": "FAQCard-a585bc61-0861-4a96-be7e-5b85a70f89eb",
                       "index": 1,
                       "data": {
@@ -2052,6 +2058,7 @@
                   {
                     "type": "FAQCard",
                     "props": {
+                      "slots": {},
                       "id": "FAQCard-19a25060-a7af-4f17-80a3-c63cceb619ad",
                       "index": 2,
                       "data": {

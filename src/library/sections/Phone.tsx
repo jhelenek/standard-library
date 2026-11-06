@@ -52,6 +52,9 @@ export interface PhoneProps {
 // Phone field definitions used in Phone and CoreInfoSection
 export const PhoneDataFields: YextFields<PhoneProps["data"]> = {
   number: {
+    generation: {
+      instructions: "The entity phone field; never generate a phone number.",
+    },
     type: "entityField",
     label: msg("fields.phoneNumber", "Phone Number"),
     filter: {
@@ -82,11 +85,17 @@ export const PhoneStyleFields: YextFields<PhoneProps["styles"]> = {
     ],
   },
   includeIcon: {
+    generation: {
+      required: false,
+    },
     label: msg("fields.showIcon", "Show Icon"),
     type: "radio",
     options: ThemeOptions.SHOW_HIDE,
   },
   color: {
+    generation: {
+      instructions: "Controls phone link and icon background colors.",
+    },
     type: "basicSelector",
     label: msg("fields.color", "Color"),
     options: "SITE_COLOR",

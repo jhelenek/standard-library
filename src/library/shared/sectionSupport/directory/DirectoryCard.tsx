@@ -442,6 +442,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 const directoryCardFields: YextFields<DirectoryCardProps> = {
   // The data fields are configured by directoryCardsSource.mappingFields in DirectoryWrapper.tsx.
   data: {
+    generation: { exclude: true },
     type: "custom",
     visible: false,
     render: () => <></>,
@@ -451,6 +452,7 @@ const directoryCardFields: YextFields<DirectoryCardProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -460,10 +462,34 @@ const directoryCardFields: YextFields<DirectoryCardProps> = {
   slots: {
     type: "object",
     objectFields: {
-      HeadingSlot: { type: "slot", allow: [] },
-      AddressSlot: { type: "slot", allow: [] },
-      PhoneSlot: { type: "slot", allow: [] },
-      HoursSlot: { type: "slot", allow: [] },
+      HeadingSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeadingTextSlot"],
+      },
+      AddressSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["AddressSlot"],
+      },
+      PhoneSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["PhoneSlot"],
+      },
+      HoursSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HoursStatusSlot"],
+      },
     },
     visible: false,
   },
@@ -472,6 +498,19 @@ const directoryCardFields: YextFields<DirectoryCardProps> = {
 export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
   label: msg("slots.directoryCard", "Directory Card"),
   fields: directoryCardFields,
+  layoutGenerationMetadata: {
+    resolvedProps: [
+      "/data/cardTitle",
+      "/data/linkOverride",
+      "/data/showAddress",
+      "/data/showHoursStatus",
+      "/data/showPhoneNumber",
+      "/field",
+      "/index",
+      "/parentData/childRef",
+      "/slots/HeadingSlot/0/props/parentData",
+    ],
+  },
   defaultProps: {
     data: {
       cardTitle: defaultCardTitle,
@@ -483,12 +522,7 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
-    slots: {
-      HeadingSlot: [],
-      PhoneSlot: [],
-      HoursSlot: [],
-      AddressSlot: [],
-    },
+    slots: defaultDirectoryCardSlotData("", 0).props.slots,
   },
   resolveData: (data) =>
     bindSlots(data, {

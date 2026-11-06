@@ -67,6 +67,7 @@ const primaryHeaderSlotFields: YextFields<PrimaryHeaderSlotProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
+        generation: { required: false },
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
@@ -76,14 +77,43 @@ const primaryHeaderSlotFields: YextFields<PrimaryHeaderSlotProps> = {
   slots: {
     type: "object",
     objectFields: {
-      PrimaryCTASlot: { type: "slot", allow: [] },
-      SecondaryCTASlot: { type: "slot", allow: [] },
-      LogoSlot: { type: "slot", allow: [] },
-      LinksSlot: { type: "slot", allow: [] },
+      PrimaryCTASlot: {
+        generation: {
+          singleChild: true,
+          instructions:
+            "Primary header CTA. Populate a relevant primary action for the business and page, with a descriptive label and a matching destination supported by the provided content. Replace placeholder CTA text and # links rather than retaining defaults. Visibility is controlled by the child CTA's data.show; enable it when authoring visible CTA content.",
+        },
+        type: "slot",
+        allow: ["CTASlot"],
+      },
+      SecondaryCTASlot: {
+        generation: {
+          singleChild: true,
+          instructions:
+            "Optional second header CTA. When included, populate a relevant action that complements the primary CTA, with a descriptive label and a matching destination supported by the provided content. Replace placeholder CTA text and # links rather than retaining defaults. Its child CTA owns the visibility control: data.show must be true when authoring visible secondary CTA content. There is no parent showSecondaryCTA switch on this header. If intentionally omitting this CTA, retain its hidden default instead of writing a new label and link that will never display.",
+        },
+        type: "slot",
+        allow: ["CTASlot"],
+      },
+      LogoSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["ImageSlot"],
+      },
+      LinksSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["HeaderLinks"],
+      },
     },
     visible: false,
   },
   parentValues: {
+    generation: { exclude: true },
     type: "object",
     objectFields: {
       SecondaryHeaderSlot: { type: "slot", allow: [] },

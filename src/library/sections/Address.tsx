@@ -88,6 +88,7 @@ export const AddressDataField: YextFields<AddressProps["data"]> = {
 // Address style fields used in Address and CoreInfoSection
 export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
   showRegion: {
+    generation: { required: false },
     label: msg("fields.showRegion", "Show Region"),
     type: "radio",
     options: [
@@ -96,6 +97,7 @@ export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
     ],
   },
   showCountry: {
+    generation: { required: false },
     label: msg("fields.showCountry", "Show Country"),
     type: "radio",
     options: [
@@ -117,6 +119,11 @@ export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
     options: ThemeOptions.CTA_VARIANT,
   },
   color: {
+    generation: {
+      required: false,
+      instructions:
+        "Controls the Get Directions link color or button background color.",
+    },
     type: "basicSelector",
     label: msg("fields.linkColor", "Link Color"),
     options: "SITE_COLOR",
@@ -127,6 +134,9 @@ export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
     options: "SITE_COLOR",
   },
   ctaTextColor: {
+    generation: {
+      instructions: "Controls the Get Directions button text and icon colors.",
+    },
     type: "basicSelector",
     label: msg("fields.textColor", "Text Color"),
     options: "SITE_COLOR",

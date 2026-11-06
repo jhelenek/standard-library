@@ -49,6 +49,10 @@ type socialLink = {
 export const FooterSocialLinksSlotFields: YextFields<FooterSocialLinksSlotProps> =
   {
     data: {
+      generation: {
+        instructions:
+          "Social profile URLs. Leave unavailable profiles empty; never invent URLs.",
+      },
       type: "object",
       label: msg("fields.data", "Data"),
       objectFields: {

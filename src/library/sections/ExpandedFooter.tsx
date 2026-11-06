@@ -6,7 +6,6 @@ import {
   ThemeColor,
   ThemeOptions,
   msg,
-  getMaxWidthOptions,
   themeManagerCn,
   YextComponentConfig,
   YextFields,
@@ -25,6 +24,7 @@ import { FooterUtilityImagesSlotProps } from "../shared/sectionSupport/footer/Fo
 import { FooterLinksSlotProps } from "../shared/sectionSupport/footer/FooterLinksSlot.tsx";
 import { FooterExpandedLinksWrapperProps } from "../shared/sectionSupport/footer/FooterExpandedLinksWrapper.tsx";
 import { SecondaryFooterSlotProps } from "../shared/sectionSupport/footer/SecondaryFooterSlot.tsx";
+import { resolveCanonicalSelectorGroups } from "@yext/visual-editor/section-library-support";
 
 const PLACEHOLDER_LOGO_IMAGE: string =
   "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg";
@@ -154,6 +154,10 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
         label: msg("fields.primaryFooter", "Primary Footer"),
         objectFields: {
           expandedFooter: {
+            generation: {
+              instructions:
+                "Use columns of categorized links instead of a single row of links.",
+            },
             label: msg("fields.expandFooter", "Expand Footer"),
             type: "radio",
             options: [
@@ -203,6 +207,7 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
         label: msg("fields.primaryFooter", "Primary Footer"),
         objectFields: {
           backgroundColor: {
+            generation: { required: false },
             type: "basicSelector",
             label: msg("fields.backgroundColor", "Background Color"),
             options: "BACKGROUND_COLOR",
@@ -245,30 +250,67 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
         },
       },
       maxWidth: {
+        generation: { required: false, nullable: true },
         type: "basicSelector",
         label: msg("fields.maxWidth", "Max Width"),
         disableSearch: true,
-        optionGroups: [
-          {
+        optionGroups: resolveCanonicalSelectorGroups("MAX_WIDTH").map(
+          (group) => ({
+            ...group,
             description: msg(
               "maxWidthTip",
               "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
             ),
-            options: getMaxWidthOptions(),
-          },
-        ],
+          })
+        ),
       },
     },
   },
   slots: {
     type: "object",
     objectFields: {
-      LogoSlot: { type: "slot" },
-      SocialLinksSlot: { type: "slot" },
-      UtilityImagesSlot: { type: "slot" },
-      PrimaryLinksWrapperSlot: { type: "slot" },
-      ExpandedLinksWrapperSlot: { type: "slot" },
-      SecondaryFooterSlot: { type: "slot" },
+      LogoSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["FooterLogoSlot"],
+      },
+      SocialLinksSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["FooterSocialLinksSlot"],
+      },
+      UtilityImagesSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["FooterUtilityImagesSlot"],
+      },
+      PrimaryLinksWrapperSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["FooterLinksSlot"],
+      },
+      ExpandedLinksWrapperSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["FooterExpandedLinksWrapper"],
+      },
+      SecondaryFooterSlot: {
+        generation: {
+          singleChild: true,
+        },
+        type: "slot",
+        allow: ["SecondaryFooterSlot"],
+      },
     },
     visible: false,
   },
@@ -278,6 +320,7 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
     visible: false,
     objectFields: {
       scope: {
+        generation: { required: false },
         label: msg("fields.scope", "Scope"),
         type: "text",
       },
