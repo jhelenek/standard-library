@@ -27,7 +27,6 @@ import {
   type ImageField,
   formatDistance,
   fromMeters,
-  getPreferredDistanceUnit,
   useTemplateMetadata,
   FieldTypeData,
   DEFAULT_ENTITY_TYPE,
@@ -40,6 +39,7 @@ import {
   themeManagerCn,
 } from "@yext/visual-editor/section-library-support";
 import { Body, BodyProps } from "../atoms/body.tsx";
+import { type DistanceUnit } from "./DistanceUnits.ts";
 import { CTA, CTAVariant } from "../atoms/cta.tsx";
 import { Heading } from "../atoms/heading.tsx";
 import { Image } from "../atoms/image.tsx";
@@ -838,12 +838,14 @@ export const LocatorResultCard = React.memo(
     result,
     resultCardProps: props,
     distanceDisplay = "distanceFromUser",
+    distanceUnit,
     searchLocationName,
     isSelected,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
     distanceDisplay?: DistanceDisplayOption;
+    distanceUnit: DistanceUnit;
     searchLocationName?: string;
     isSelected?: boolean;
   }): React.JSX.Element => {
@@ -861,7 +863,7 @@ export const LocatorResultCard = React.memo(
           ? result.distanceFromFilter
           : undefined;
 
-    const unit = getPreferredDistanceUnit(i18n.language);
+    const unit = distanceUnit;
     const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
     const displayDistance =
       typeof distance === "number"
@@ -1042,6 +1044,8 @@ export const LocatorResultCard = React.memo(
                           props.address.showGetDirectionsLink && (
                             <a
                               href={getDirectionsLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               onClick={handleGetDirectionsClick}
                               aria-label={t("getDirectionsForLocation", {
                                 address: location.address.line1,

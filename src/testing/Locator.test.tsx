@@ -21,6 +21,7 @@ import {
   backgroundColors,
 } from "@yext/visual-editor";
 import { Locator as LocatorComponent } from "../library/sections/Locator.tsx";
+import { migrationRegistry as sectionLibraryMigrationRegistry } from "../library/migrations/registry.ts";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   LocatorResultCard,
@@ -1334,6 +1335,42 @@ describe("Locator", async () => {
     },
   };
 
+  it.each([
+    {
+      name: "preserves the previous distance behavior for an existing Locator",
+      distanceUnit: undefined,
+      expected: "locale",
+    },
+    {
+      name: "preserves an explicit distance setting",
+      distanceUnit: "mile",
+      expected: "mile",
+    },
+  ])("$name", ({ distanceUnit, expected }) => {
+    const data = migrate(
+      puckConfig,
+      {
+        root: {
+          props: {
+            version: migrationRegistry.length,
+            sectionLibraryMigrationVersion: 3,
+          },
+        },
+        content: [
+          {
+            type: "Locator",
+            props: { id: "Locator-test", distanceUnit },
+          },
+        ],
+      },
+      {},
+      migrationRegistry,
+      sectionLibraryMigrationRegistry
+    );
+
+    expect(data.content[0].props.distanceUnit).toBe(expected);
+  });
+
   it("loads q before initialLocation and syncs selected locations with history", async () => {
     const originalUrl = window.location.href;
     const fixture = tests[1];
@@ -1533,6 +1570,7 @@ describe("Locator", async () => {
     const { container } = reactRender(
       <VisualEditorProvider templateProps={{ document: { locale: "en" } }}>
         <LocatorResultCard
+          distanceUnit="mile"
           result={
             {
               index: 1,
@@ -1562,6 +1600,8 @@ describe("Locator", async () => {
     const directionsLink = screen.getByRole("link", {
       name: "Get Directions for 1101 Wilson Blvd",
     });
+    expect(directionsLink).toHaveAttribute("target", "_blank");
+    expect(directionsLink).toHaveAttribute("rel", "noopener noreferrer");
     expect(directionsLink.querySelector("svg")).toHaveAttribute(
       "aria-hidden",
       "true"
